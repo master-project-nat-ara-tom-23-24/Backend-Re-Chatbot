@@ -30,6 +30,9 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("../Chatbot/build/repo")
+    }
 }
 
 dependencies {
@@ -78,6 +81,8 @@ dependencies {
     testImplementation("com.ninja-squad:springmockk:4.0.2")
     testImplementation("org.junit.platform:junit-platform-suite:1.10.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+    implementation("com.example:my-library:1.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.2")
 }
 /*
 test {

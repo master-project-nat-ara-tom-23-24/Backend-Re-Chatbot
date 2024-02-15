@@ -5,6 +5,7 @@ import ch.uzh.ifi.access.projections.*
 import ch.uzh.ifi.access.service.CourseService
 import ch.uzh.ifi.access.service.CourseServiceForCaching
 import ch.uzh.ifi.access.service.RoleService
+import chatbot.Chatbot
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.prepost.PreAuthorize
@@ -12,7 +13,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
-
+@CrossOrigin(origins = ["http://localhost:3000"])
 @RestController
 class CourseRootController(
     private val courseService: CourseService,
@@ -179,5 +180,18 @@ class CourseController (
         return courseService.getCourseSummary(course)
     }
 
+    @PostMapping("/{courseSlug}/assignments/{assignment}/tasks/{task}/users/{user}/chat/prompt")
+    suspend fun callChatbot(
+          @PathVariable courseSlug: String,
+          @PathVariable assignment: String,
+          @PathVariable task: String,
+          @PathVariable user: String,
+          @RequestBody body: ChatbotDTO
+      ) : Map<String, Any> {
+          //TODO get chatbot instance: Chatbot.getInstance(chat, user, courseSlug, assignment)
+          //TODO run chatbot.run(prompt) and return output
 
+        val chatbot : Chatbot = Chatbot.getInstance(body.chatId, user, courseSlug, assignment)
+        return chatbot.run(body.prompt)
+ }
     }
