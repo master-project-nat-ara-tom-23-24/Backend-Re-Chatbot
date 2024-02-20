@@ -82,8 +82,11 @@ dependencies {
     testImplementation("org.junit.platform:junit-platform-suite:1.10.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
 
+    // for chatbot
     implementation("com.example:my-library:1.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.2")
+    implementation("org.jboss:jandex:3.1.6")
+
 }
 /*
 test {
