@@ -181,17 +181,25 @@ class CourseController (
     }
 
     @PostMapping("/{courseSlug}/assignments/{assignment}/tasks/{task}/users/{user}/chat/prompt")
-    suspend fun callChatbot(
+    suspend fun promptChatbot(
           @PathVariable courseSlug: String,
           @PathVariable assignment: String,
           @PathVariable task: String,
           @PathVariable user: String,
-          @RequestBody body: ChatbotDTO
+          @RequestBody prompt: String
       ) : Map<String, Any> {
-          //TODO get chatbot instance: Chatbot.getInstance(chat, user, courseSlug, assignment)
-          //TODO run chatbot.run(prompt) and return output
+        val chatbot : Chatbot = Chatbot.getInstance(user, courseSlug, assignment, task)
+        return chatbot.run(prompt)
+    }
 
-        val chatbot : Chatbot = Chatbot.getInstance(body.chatId, user, courseSlug, assignment)
-        return chatbot.run(body.prompt)
+    @GetMapping("/{courseSlug}/assignments/{assignment}/tasks/{task}/users/{user}/chat/history")
+    suspend fun getChatbotHistory(
+        @PathVariable courseSlug: String,
+        @PathVariable assignment: String,
+        @PathVariable task: String,
+        @PathVariable user: String
+    ) : List<Map<String, Any>> {
+        val chatbot : Chatbot = Chatbot.getInstance(user, courseSlug, assignment, task)
+        return chatbot.getHistory()
     }
 }
