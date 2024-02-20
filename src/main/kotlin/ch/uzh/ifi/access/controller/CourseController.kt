@@ -193,5 +193,5 @@ class CourseController (
 
         val chatbot : Chatbot = Chatbot.getInstance(body.chatId, user, courseSlug, assignment)
         return chatbot.run(body.prompt)
- }
     }
+}
