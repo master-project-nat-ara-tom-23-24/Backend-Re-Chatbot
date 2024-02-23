@@ -102,8 +102,7 @@ class CourseService(
     private val courseLifecycle: CourseLifecycle,
     private val roleService: RoleService,
     private val fileService: FileService,
-    private val tika: Tika,
-    private val chatbotService: ChatbotService
+    private val tika: Tika
 ) {
 
     private val logger = KotlinLogging.logger {}
@@ -591,13 +590,11 @@ exit ${'$'}exit_code;
     }
 
     fun createCourse(course: CourseDTO): Course {
-        chatbotService.createContext(course)
         return courseLifecycle.createFromRepository(course)
     }
 
     @Transactional
     fun editCourse(course: CourseDTO): Course {
-        chatbotService.createContext(course)
         val existingCourse = getCourseBySlug(course.slug!!)
         existingCourse.repository = course.repository
         existingCourse.repositoryUser = course.repositoryUser

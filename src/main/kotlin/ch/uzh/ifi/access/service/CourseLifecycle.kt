@@ -31,7 +31,8 @@ class CourseLifecycle(
     private val modelMapper: ModelMapper,
     private val dockerClient: DockerClient,
     private val cci: CourseConfigImporter,
-    private val fileService: FileService
+    private val fileService: FileService,
+    private val chatbotService: ChatbotService
     ) {
 
     private val logger = KotlinLogging.logger {}
@@ -198,14 +199,14 @@ class CourseLifecycle(
 
     private fun cloneRepository(course: Course): Path {
         logger.debug { "Cloning ${course.slug} from ${course.repository}"}
-        return cloneRepository(course.repository!!, course.repositoryUser, course.repositoryPassword,)
+        return cloneRepository(course.repository!!, course.repositoryUser, course.repositoryPassword,course.slug)
     }
     private fun cloneRepository(courseDTO: CourseDTO): Path {
         logger.debug { "Cloning ${courseDTO.slug} from ${courseDTO.repository}"}
-        return cloneRepository(courseDTO.repository!!, courseDTO.repositoryUser, courseDTO.repositoryPassword, )
+        return cloneRepository(courseDTO.repository!!, courseDTO.repositoryUser, courseDTO.repositoryPassword,courseDTO.slug )
 
     }
-    private fun cloneRepository(url: String, user: String?, password: String?): Path {
+    private fun cloneRepository(url: String, user: String?, password: String?, courseSlug: String?): Path {
         val coursePath = workingDir.resolve("courses").resolve("course_" + Instant.now().toEpochMilli())
         return try {
             val git = Git.cloneRepository()
@@ -216,6 +217,7 @@ class CourseLifecycle(
                 .setCredentialsProvider(UsernamePasswordCredentialsProvider(user, password))
             }
             git.call()
+            chatbotService.createContext(coursePath.fileName.toString(), courseSlug)
             coursePath
         } catch (e: GitAPIException) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to clone repository")
