@@ -7,6 +7,9 @@ import org.springframework.web.client.RestTemplate
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
+import org.springframework.core.env.Environment
+import java.nio.file.Path
+
 
 @Configuration
 class ChatbotServiceConfig {
@@ -17,14 +20,21 @@ class ChatbotServiceConfig {
     }
 }
 
+data class ChatbotData(
+    val course: String,
+    val slug: String
+)
 
 @Service
-class ChatbotService(private val restTemplate: RestTemplate) {
-    fun createContext(course: CourseDTO) {
-        val chatbotApiUrl = "http://127.0.0.1:3423/contexts/create"
+class ChatbotService(private val restTemplate: RestTemplate, private val env: Environment) {
+    
+    fun createContext(slug: String, coursePath: Path) {
+        //this should be changed and put in a config file
+        val chatbotApiUrl = env.getProperty("CONTEXT_SERVICE_URL", "http://127.0.0.1:3423/contexts/create") 
         val headers = HttpHeaders()
         headers.set("Content-Type", "application/json")
-        val requestEntity = HttpEntity(course, headers)
+        val chatbotData = ChatbotData(course = coursePath.fileName.toString(), slug = slug)
+        val requestEntity = HttpEntity(chatbotData, headers)
         restTemplate.exchange(chatbotApiUrl, HttpMethod.PUT, requestEntity, String::class.java)
     }
 
