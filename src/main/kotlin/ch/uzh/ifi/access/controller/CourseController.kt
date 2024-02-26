@@ -5,7 +5,7 @@ import ch.uzh.ifi.access.projections.*
 import ch.uzh.ifi.access.service.CourseService
 import ch.uzh.ifi.access.service.CourseServiceForCaching
 import ch.uzh.ifi.access.service.RoleService
-import chatbot.model.Chatbot
+import chatbot.Chatbot
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.http.HttpStatus
