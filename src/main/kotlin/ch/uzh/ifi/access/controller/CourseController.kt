@@ -6,6 +6,8 @@ import ch.uzh.ifi.access.service.CourseService
 import ch.uzh.ifi.access.service.CourseServiceForCaching
 import ch.uzh.ifi.access.service.RoleService
 import chatbot.model.Chatbot
+import chatbot.model.ChatbotResponse
+import chatbot.model.Message
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.http.HttpStatus
@@ -188,7 +190,7 @@ class CourseController (
           @PathVariable task: String,
           @PathVariable user: String,
           @RequestBody prompt: String
-      ) : Map<String, Any> {
+      ) : ChatbotResponse {
         val chatbot : Chatbot = Chatbot.getInstance(user, courseSlug, assignment, task)
         return chatbot.run(prompt)
     }
@@ -199,7 +201,7 @@ class CourseController (
         @PathVariable assignment: String,
         @PathVariable task: String,
         @PathVariable user: String
-    ) : List<Map<String, Any>> {
+    ) : List<Message> {
         val chatbot : Chatbot = Chatbot.getInstance(user, courseSlug, assignment, task)
         return chatbot.getHistory()
     }
