@@ -1,14 +1,12 @@
 package ch.uzh.ifi.access.controller
-
+import chatbot.model.Message
 import ch.uzh.ifi.access.model.dto.*
 import ch.uzh.ifi.access.projections.*
+import ch.uzh.ifi.access.service.ChatbotService
 import ch.uzh.ifi.access.service.CourseService
 import ch.uzh.ifi.access.service.CourseServiceForCaching
 import ch.uzh.ifi.access.service.RoleService
-import chatbot.model.Chatbot
 import chatbot.model.ChatbotResponse
-import chatbot.model.Message
-
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.prepost.PreAuthorize
@@ -72,7 +70,8 @@ class WebhooksController(
 class CourseController (
     private val courseService: CourseService,
     private val courseServiceForCaching: CourseServiceForCaching,
-    private val roleService: RoleService
+    private val roleService: RoleService,
+    private val chatbotService: ChatbotService
 )
     {
 
@@ -190,9 +189,9 @@ class CourseController (
           @PathVariable task: String,
           @PathVariable user: String,
           @RequestBody prompt: String
-      ) : ChatbotResponse {
-        val chatbot : Chatbot = Chatbot.getInstance(user, courseSlug, assignment, task)
-        return chatbot.run(prompt)
+      ) : ChatbotResponse
+    {
+        return chatbotService.promptChatbot(courseSlug, assignment, task, user, prompt)
     }
 
     @GetMapping("/{courseSlug}/assignments/{assignment}/tasks/{task}/users/{user}/chat/history")
@@ -202,7 +201,6 @@ class CourseController (
         @PathVariable task: String,
         @PathVariable user: String
     ) : List<Message> {
-        val chatbot : Chatbot = Chatbot.getInstance(user, courseSlug, assignment, task)
-        return chatbot.getHistory()
+        return chatbotService.getChatbotHistory(user, courseSlug, assignment, task)
     }
 }
