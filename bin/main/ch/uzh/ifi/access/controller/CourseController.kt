@@ -1,4 +1,5 @@
 package ch.uzh.ifi.access.controller
+import ch.uzh.ifi.access.model.TaskFile
 import chatbot.model.Message
 import ch.uzh.ifi.access.model.dto.*
 import ch.uzh.ifi.access.projections.*
@@ -191,7 +192,8 @@ class CourseController (
           @RequestBody prompt: String
       ) : ChatbotResponse
     {
-        return chatbotService.promptChatbot(courseSlug, assignment, task, user, prompt)
+        val taskFiles: List<TaskFile?>? = courseService.getTask(courseSlug, assignment, task, user).files
+        return chatbotService.promptChatbot(courseSlug, assignment, task, user, taskFiles, prompt)
     }
 
     @GetMapping("/{courseSlug}/assignments/{assignment}/tasks/{task}/users/{user}/chat/history")
