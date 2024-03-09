@@ -205,4 +205,10 @@ class CourseController (
     ) : List<Message> {
         return chatbotService.getChatbotHistory(user, courseSlug, assignment, task)
     }
+    @GetMapping("/{courseSlug}/status")
+    suspend fun getContextStatus(
+        @PathVariable courseSlug: String
+    ) : ContextStatusDto? {
+        return chatbotService.getContextStatus(courseSlug)
+    }
 }
