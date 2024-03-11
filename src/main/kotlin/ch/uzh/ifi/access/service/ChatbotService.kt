@@ -1,6 +1,6 @@
 package ch.uzh.ifi.access.service
 import ch.uzh.ifi.access.model.TaskFile
-import ch.uzh.ifi.access.model.dto.ContextStatusDto
+import ch.uzh.ifi.access.model.dto.chatbot.ContextStatusDTO
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Service
@@ -52,7 +52,7 @@ class ChatbotService(
         restTemplate.exchange(chatbotApiUrl, HttpMethod.PUT, requestEntity, String::class.java)
     }
 
-    fun getContextStatus(slug: String) :ContextStatusDto?{
+    fun getContextStatus(slug: String) : ContextStatusDTO?{
         val contextServiceUrl = env.getProperty("CONTEXT_SERVICE_URL", "http://127.0.0.1:3423")
         val endpoint = "/contexts/course_slug/status"
 
@@ -64,7 +64,7 @@ class ChatbotService(
         val responseEntity = restTemplate.exchange(url, HttpMethod.GET, HttpEntity.EMPTY, String::class.java)
 
         return responseEntity.body?.let {
-            objectMapper.readValue(it, ContextStatusDto::class.java)
+            objectMapper.readValue(it, ContextStatusDTO::class.java)
         }
     }
 

@@ -1,6 +1,6 @@
-package ch.uzh.ifi.access.model.dto
+package ch.uzh.ifi.access.model.dto.chatbot
 
-data class ContextStatusDto(
+data class ContextStatusDTO(
     val successfullFiles: List<String>,
     val unsuccessfullFiles: List<String>,
     val timestamp: Int

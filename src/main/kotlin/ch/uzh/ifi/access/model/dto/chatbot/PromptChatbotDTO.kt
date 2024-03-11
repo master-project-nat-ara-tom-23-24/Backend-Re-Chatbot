@@ -1,4 +1,5 @@
 package ch.uzh.ifi.access.model.dto.chatbot
 
-class PromptChatbotDTO {
+data class PromptChatbotDTO(val prompt: String){
+    constructor() : this("")
 }

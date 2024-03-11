@@ -2,6 +2,8 @@ package ch.uzh.ifi.access.controller
 import ch.uzh.ifi.access.model.TaskFile
 import chatbot.model.Message
 import ch.uzh.ifi.access.model.dto.*
+import ch.uzh.ifi.access.model.dto.chatbot.ContextStatusDTO
+import ch.uzh.ifi.access.model.dto.chatbot.PromptChatbotDTO
 import ch.uzh.ifi.access.projections.*
 import ch.uzh.ifi.access.service.ChatbotService
 import ch.uzh.ifi.access.service.CourseService
@@ -189,11 +191,11 @@ class CourseController (
           @PathVariable assignment: String,
           @PathVariable task: String,
           @PathVariable user: String,
-          @RequestBody prompt: String
+          @RequestBody prompt: PromptChatbotDTO
       ) : ChatbotResponse
     {
         val taskFiles: List<TaskFile?>? = courseService.getTask(courseSlug, assignment, task, user).files
-        return chatbotService.promptChatbot(courseSlug, assignment, task, user, taskFiles, prompt)
+        return chatbotService.promptChatbot(courseSlug, assignment, task, user, taskFiles, prompt.prompt)
     }
 
     @GetMapping("/{courseSlug}/assignments/{assignment}/tasks/{task}/users/{user}/chat/history")
@@ -208,7 +210,7 @@ class CourseController (
     @GetMapping("/{courseSlug}/status")
     suspend fun getContextStatus(
         @PathVariable courseSlug: String
-    ) : ContextStatusDto? {
+    ) : ContextStatusDTO? {
         return chatbotService.getContextStatus(courseSlug)
     }
 }
