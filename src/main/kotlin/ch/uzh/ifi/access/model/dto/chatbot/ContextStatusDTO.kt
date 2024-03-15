@@ -4,8 +4,6 @@ data class ContextStatusDTO(
     val successfullFiles: List<String>,
     val unsuccessfullFiles: List<String>,
     val timestamp: Int
-
-
 ) {
     constructor() : this(emptyList(), emptyList(),0)
 }
