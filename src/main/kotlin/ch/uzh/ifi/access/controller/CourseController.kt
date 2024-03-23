@@ -3,6 +3,7 @@ import ch.uzh.ifi.access.model.TaskFile
 import chatbot.model.Message
 import ch.uzh.ifi.access.model.dto.*
 import ch.uzh.ifi.access.model.dto.chatbot.ContextStatusDTO
+import ch.uzh.ifi.access.model.dto.chatbot.CourseStatusDTO
 import ch.uzh.ifi.access.model.dto.chatbot.PromptChatbotDTO
 import ch.uzh.ifi.access.projections.*
 import ch.uzh.ifi.access.service.ChatbotService
@@ -207,10 +208,10 @@ class CourseController (
     ) : List<Message> {
         return chatbotService.getChatbotHistory(user, courseSlug, assignment, task)
     }
-    @GetMapping("/{courseSlug}/status")
-    suspend fun getContextStatus(
-        @PathVariable courseSlug: String
-    ) : ContextStatusDTO? {
-        return chatbotService.getContextStatus(courseSlug)
-    }
+        @GetMapping("/status")
+        suspend fun getContextStatus(
+            @RequestParam("courseSlugs") courseSlugs: List<String>
+        ): List<CourseStatusDTO?> {
+            return courseSlugs.map { chatbotService.getCourseContextStatus(it) }
+        }
 }
