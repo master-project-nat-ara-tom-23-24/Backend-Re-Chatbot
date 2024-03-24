@@ -54,13 +54,19 @@ class ChatbotService(
     }
 
     fun getCourseContextStatus(slug: String) : CourseStatusDTO?{
-        val contextServiceUrl = env.getProperty("CONTEXT_SERVICE_URL", "http://127.0.0.1:3423")
-        val endpoint = "/contexts/course_slug/status"
-        val url = "$contextServiceUrl$endpoint".replace("course_slug", hashSlug(slug))
-        val headers = HttpHeaders()
-        headers.set("Content-Type", "application/json")
-        val responseEntity = restTemplate.exchange(url, HttpMethod.GET, HttpEntity.EMPTY, String::class.java)
-        val context: ContextStatusDTO? = responseEntity.body?.let { objectMapper.readValue(it, ContextStatusDTO::class.java) }
+        var context: ContextStatusDTO?
+        try {
+            val contextServiceUrl = env.getProperty("CONTEXT_SERVICE_URL", "http://127.0.0.1:3423")
+            val endpoint = "/contexts/course_slug/status"
+            val url = "$contextServiceUrl$endpoint".replace("course_slug", hashSlug(slug))
+            val headers = HttpHeaders()
+            headers.set("Content-Type", "application/json")
+            val responseEntity = restTemplate.exchange(url, HttpMethod.GET, HttpEntity.EMPTY, String::class.java)
+            context = responseEntity.body?.let { objectMapper.readValue(it, ContextStatusDTO::class.java) }
+        } catch(e: Exception){
+            context = ContextStatusDTO();
+        }
+
         return CourseStatusDTO(slug,context)
     }
 
