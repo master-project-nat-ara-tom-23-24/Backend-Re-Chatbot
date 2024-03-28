@@ -73,7 +73,7 @@ class ChatbotService(
         return CourseStatusDTO(slug,context)
     }
 
-    suspend private fun getTaskInstructions(taskFiles: List<TaskFile?>?): String {
+    private fun getTaskInstructions(taskFiles: List<TaskFile?>?): String {
         val taskInstructionFiles: List<TaskFile?>? = taskFiles?.filter { it?.instruction == true }
         var taskInstructionsString: String = ""
         taskInstructionFiles?.forEach { taskInstructionsString += "\n${it?.template ?: ""}" }
@@ -89,7 +89,7 @@ class ChatbotService(
         return chatbot.run(taskInstructionsString, prompt)
     }
 
-    suspend fun  getChatbotHistory(user: String, courseSlug: String, assignment: String, task: String) : List<Message>{
+    suspend fun getChatbotHistory(user: String, courseSlug: String, assignment: String, task: String) : List<Message>{
         val courseSlugHash = hashSlug(courseSlug)
         val chatbot : Chatbot = Chatbot.getInstance(user, courseSlug, courseSlugHash, assignment, task)
         return chatbot.getHistory()
