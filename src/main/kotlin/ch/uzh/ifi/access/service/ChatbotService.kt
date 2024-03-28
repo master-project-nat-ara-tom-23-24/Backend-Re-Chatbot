@@ -44,7 +44,10 @@ class ChatbotService(
     
     fun createContext(slug: String, coursePath: Path) {
         //this should be changed and put in a config file
-        val chatbotApiUrl = env.getProperty("CONTEXT_SERVICE_URL", "http://127.0.0.1:3423/contexts/create") 
+  
+        val baseUrl = env.getProperty("CONTEXT_SERVICE_URL", "http://127.0.0.1:3423")
+        val endpoint = "/contexts/create"
+        val chatbotApiUrl = baseUrl + endpoint
         val headers = HttpHeaders()
         headers.set("Content-Type", "application/json")
         val courseSlugHash = hashSlug(slug)
