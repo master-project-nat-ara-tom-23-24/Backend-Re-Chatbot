@@ -148,7 +148,7 @@ tasks.withType<Test> {
 }
 
 flyway {
-    url = System.getenv("POSTGRES_URL") ?: "jdbc:postgresql://localhost:5432/access"
+    url = System.getenv("POSTGRES_URL") ?: "jdbc:postgresql://postgres:5432/access"
     user = "admin"
     password = "admin"
 }

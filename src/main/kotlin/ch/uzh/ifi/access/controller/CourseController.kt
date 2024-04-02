@@ -18,7 +18,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
-@CrossOrigin(origins = ["http://localhost:3000","http://0.0.0.0:3000"])
+
 @RestController
 class CourseRootController(
     private val courseService: CourseService,
