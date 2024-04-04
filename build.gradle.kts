@@ -36,6 +36,14 @@ repositories {
 }
 
 dependencies {
+    implementation("io.ktor:ktor-client-okhttp:1.6.4")
+    implementation("io.ktor:ktor-client-core:1.6.4")
+    implementation("io.ktor:ktor-client-json:1.6.4")
+    implementation("io.ktor:ktor-client-serialization:1.6.4")
+    implementation("io.milvus:milvus-sdk-java:2.3.4")
+    implementation("dev.langchain4j:langchain4j:0.25.0")
+    implementation("dev.langchain4j:langchain4j-ollama:0.25.0")
+    implementation("org.hibernate:hibernate-core:6.4.2.Final")
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-mail")
