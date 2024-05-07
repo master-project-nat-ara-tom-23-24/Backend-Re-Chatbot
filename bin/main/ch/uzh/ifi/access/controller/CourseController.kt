@@ -1,4 +1,6 @@
 package ch.uzh.ifi.access.controller
+import ch.uzh.ifi.access.model.Submission
+import ch.uzh.ifi.access.model.Task
 import ch.uzh.ifi.access.model.TaskFile
 import chatbot.model.Message
 import ch.uzh.ifi.access.model.dto.*
@@ -195,8 +197,10 @@ class CourseController (
           @RequestBody prompt: PromptChatbotDTO
       ) : ChatbotResponse
     {
-        val taskFiles: List<TaskFile?>? = courseService.getTask(courseSlug, assignment, task, user).files
-        return chatbotService.promptChatbot(courseSlug, assignment, task, user, taskFiles, prompt.prompt)
+        val taskWorkspace: TaskWorkspace = courseService.getTask(courseSlug, assignment, task, user)
+        val taskFiles: List<TaskFile?>? = taskWorkspace.files
+        val submission: Submission = courseService.getSubmissions(taskWorkspace.id, user).first()
+        return chatbotService.promptChatbot(courseSlug, assignment, task, user, taskFiles, submission, prompt.prompt)
     }
 
     @GetMapping("/{courseSlug}/assignments/{assignment}/tasks/{task}/users/{user}/chat/history")
