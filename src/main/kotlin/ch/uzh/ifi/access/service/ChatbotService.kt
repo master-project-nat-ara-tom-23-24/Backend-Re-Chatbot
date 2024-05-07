@@ -1,4 +1,5 @@
 package ch.uzh.ifi.access.service
+import ch.uzh.ifi.access.model.Submission
 import ch.uzh.ifi.access.model.TaskFile
 import ch.uzh.ifi.access.model.dto.chatbot.ContextStatusDTO
 import ch.uzh.ifi.access.model.dto.chatbot.CourseStatusDTO
@@ -73,20 +74,36 @@ class ChatbotService(
         return CourseStatusDTO(slug,context)
     }
 
-    private fun getTaskInstructions(taskFiles: List<TaskFile?>?): String {
+    private fun getTaskInstructionsString(taskFiles: List<TaskFile?>?): String {
         val taskInstructionFiles: List<TaskFile?>? = taskFiles?.filter { it?.instruction == true }
-        var taskInstructionsString: String = ""
-        taskInstructionFiles?.forEach { taskInstructionsString += "\n${it?.template ?: ""}" }
-        return taskInstructionsString;
+        val taskInstructionsString = StringBuilder()
+        taskInstructionFiles?.forEach { taskInstructionsString.append("${it?.template ?: ""}\n") }
+        return taskInstructionsString.toString()
     }
 
-    suspend fun promptChatbot(courseSlug: String, assignment: String, task: String, user: String, taskInstructions: List<TaskFile?>?, prompt: String): ChatbotResponse {
+    private fun getSubmissionFilesString(submission: Submission?): String {
+        val submissionsString = StringBuilder()
+//        submissions?.forEachIndexed { submissionIndex, submission ->
+            submissionsString.append("Submission ${1}:\n")
+            submission?.files?.forEach { file ->
+                submissionsString.append("${file.taskFile?.name}:\n")
+                submissionsString.append("${file.content}\n")
+            }
+//            submissionsString.append("\n")
+//        }
+        submissionsString.removeSuffix("\n")
+        return submissionsString.toString()
+    }
+
+    suspend fun promptChatbot(courseSlug: String, assignment: String, task: String, user: String, taskInstructions: List<TaskFile?>?, submission: Submission, prompt: String): ChatbotResponse {
         val courseSlugHash: String = hashSlug(courseSlug)
 
-        val taskInstructionsString: String = getTaskInstructions(taskInstructions)
+        val taskInstructionsString: String = getTaskInstructionsString(taskInstructions)
+
+        val submissionFilesString: String = getSubmissionFilesString(submission)
 
         val chatbot : Chatbot = Chatbot.getInstance(user, courseSlug, courseSlugHash, assignment, task)
-        return chatbot.run(taskInstructionsString, prompt)
+        return chatbot.run(taskInstructionsString, submissionFilesString, prompt)
     }
 
     suspend fun getChatbotHistory(user: String, courseSlug: String, assignment: String, task: String) : List<Message>{

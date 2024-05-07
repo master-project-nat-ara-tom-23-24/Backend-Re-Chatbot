@@ -93,7 +93,7 @@ dependencies {
     // for chatbot
     //implementation("com.example:my-library:1.0.0")
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutnes-reactor:1.5.2")
     implementation("org.jboss:jandex:3.1.6")
 
 }
