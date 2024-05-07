@@ -10,7 +10,7 @@ COPY build.gradle.kts ./
 # Copy the source code into the Docker image
 COPY src ./src
 
-COPY ./my-library-1.0.0.jar ./libs/
+COPY ./access-chatbot-1.0.0.jar ./libs/
 
 # Build the application
 RUN gradle bootJar
