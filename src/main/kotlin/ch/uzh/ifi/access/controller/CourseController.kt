@@ -199,7 +199,11 @@ class CourseController (
     {
         val taskWorkspace: TaskWorkspace = courseService.getTask(courseSlug, assignment, task, user)
         val taskFiles: List<TaskFile?>? = taskWorkspace.files
-        val submission: Submission = courseService.getSubmissions(taskWorkspace.id, user).first()
+        val submissions: List<Submission> = courseService.getSubmissions(taskWorkspace.id, user)
+        var submission: Submission? = null
+        if(submissions.isNotEmpty()){
+            submission = submissions.first()
+        }
         return chatbotService.promptChatbot(courseSlug, assignment, task, user, taskFiles, submission, prompt.prompt)
     }
 

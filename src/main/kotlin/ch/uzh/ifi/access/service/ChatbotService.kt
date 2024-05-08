@@ -92,7 +92,7 @@ class ChatbotService(
         return submissionsString.toString()
     }
 
-    suspend fun promptChatbot(courseSlug: String, assignment: String, task: String, user: String, taskInstructions: List<TaskFile?>?, submission: Submission, prompt: String): ChatbotResponse {
+    suspend fun promptChatbot(courseSlug: String, assignment: String, task: String, user: String, taskInstructions: List<TaskFile?>?, submission: Submission?, prompt: String): ChatbotResponse {
         val courseSlugHash: String = hashSlug(courseSlug)
 
         val taskInstructionsString: String = getTaskInstructionsString(taskInstructions)
