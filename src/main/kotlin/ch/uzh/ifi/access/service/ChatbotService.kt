@@ -78,29 +78,28 @@ class ChatbotService(
         return taskInstructionsString.toString()
     }
 
-    private fun getSubmissionFilesString(submission: Submission?): String {
-        val submissionsString = StringBuilder()
-//        submissions?.forEachIndexed { submissionIndex, submission ->
-            submissionsString.append("Submission ${1}:\n")
-            submission?.files?.forEach { file ->
-                submissionsString.append("${file.taskFile?.name}:\n")
-                submissionsString.append("${file.content}\n")
+    private fun getSubmissionFilesString(submissions: List<Submission>): List<String> {
+        val submissionStrings: MutableList<String> = mutableListOf()
+        submissions.forEach { submission ->
+        val submissionString = StringBuffer()
+            submission.files.forEach { file ->
+                submissionString.append("${file.taskFile?.name}:\n")
+                submissionString.append("${file.content}\n\n")
             }
-//            submissionsString.append("\n")
-//        }
-        submissionsString.removeSuffix("\n")
-        return submissionsString.toString()
+        submissionStrings.add(submissionString.toString())
+        }
+        return submissionStrings
     }
 
-    suspend fun promptChatbot(courseSlug: String, assignment: String, task: String, user: String, taskInstructions: List<TaskFile?>?, submission: Submission?, prompt: String): ChatbotResponse {
+    suspend fun promptChatbot(courseSlug: String, assignment: String, task: String, user: String, taskInstructions: List<TaskFile?>?, submissions: List<Submission>, prompt: String): ChatbotResponse {
         val courseSlugHash: String = hashSlug(courseSlug)
 
         val taskInstructionsString: String = getTaskInstructionsString(taskInstructions)
 
-        val submissionFilesString: String = getSubmissionFilesString(submission)
+        val submissionStrings: List<String> = getSubmissionFilesString(submissions)
 
         val chatbot : Chatbot = Chatbot.getInstance(user, courseSlug, courseSlugHash, assignment, task)
-        return chatbot.run(taskInstructionsString, submissionFilesString, prompt)
+        return chatbot.run(taskInstructionsString, submissionStrings, prompt)
     }
 
     suspend fun getChatbotHistory(user: String, courseSlug: String, assignment: String, task: String) : List<Message>{
