@@ -45,7 +45,7 @@ class ChatbotService(
     
     fun createContext(slug: String, coursePath: Path) {
         //this should be changed and put in a config file
-        val chatbotApiUrl = env.getProperty("CONTEXT_SERVICE_URL", "http://127.0.0.1:3423/contexts/create") 
+        val chatbotApiUrl = env.getProperty("CHATBOT_CONTEXT_SERVICE_URL", "http://127.0.0.1:3423") + "/contexts/create"
         val headers = HttpHeaders()
         headers.set("Content-Type", "application/json")
         val courseSlugHash = hashSlug(slug)
@@ -57,7 +57,7 @@ class ChatbotService(
     fun getCourseContextStatus(slug: String) : CourseStatusDTO?{
         var context: ContextStatusDTO?
         try {
-            val contextServiceUrl = env.getProperty("CONTEXT_SERVICE_URL", "http://127.0.0.1:3423")
+            val contextServiceUrl = env.getProperty("CHATBOT_CONTEXT_SERVICE_URL", "http://127.0.0.1:3423")
             val endpoint = "/contexts/course_slug/status"
             val url = "$contextServiceUrl$endpoint".replace("course_slug", hashSlug(slug))
             val headers = HttpHeaders()
@@ -98,13 +98,13 @@ class ChatbotService(
 
         val submissionStrings: List<String> = getSubmissionFilesString(submissions)
 
-        val chatbot : Chatbot = Chatbot.getInstance(user, courseSlug, courseSlugHash, assignment, task)
+        val chatbot = Chatbot(user, courseSlug, courseSlugHash, assignment, task)
         return chatbot.run(taskInstructionsString, submissionStrings, prompt)
     }
 
     suspend fun getChatbotHistory(user: String, courseSlug: String, assignment: String, task: String) : List<Message>{
         val courseSlugHash = hashSlug(courseSlug)
-        val chatbot : Chatbot = Chatbot.getInstance(user, courseSlug, courseSlugHash, assignment, task)
+        val chatbot = Chatbot(user, courseSlug, courseSlugHash, assignment, task)
         return chatbot.getHistory()
     }
 

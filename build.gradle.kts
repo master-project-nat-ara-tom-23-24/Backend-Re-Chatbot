@@ -31,7 +31,12 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 repositories {
     mavenCentral()
     maven {
-        url = uri("../Chatbot/build/repo")
+        // Chatbot library
+        url = uri("https://maven.pkg.github.com/master-project-nat-ara-tom-23-24/Chatbot")
+        credentials {
+            username = project.findProperty("gpr.github_user") as String? ?: System.getenv("GITHUB_USER")
+            password = project.findProperty("gpr.github_token") as String? ?: System.getenv("GITHUB_TOKEN")
+        }
     }
 }
 
@@ -82,10 +87,11 @@ dependencies {
     testImplementation("org.junit.platform:junit-platform-suite:1.10.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
 
-    // for chatbot
-    implementation("ch.uzh.ifi:access-chatbot:1.0.0")
+    // Chatbot
+    implementation("ch.uzh.ifi:access-chatbot:1.0.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.2")
     implementation("org.jboss:jandex:3.1.6")
+    implementation("com.google.guava:guava:33.2.1-jre")
 
 }
 /*
