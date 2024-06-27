@@ -88,7 +88,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
 
     // Chatbot
-    implementation("ch.uzh.ifi:access-chatbot:1.0.1")
+    implementation("ch.uzh.ifi:access-chatbot:1.0.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.2")
     implementation("org.jboss:jandex:3.1.6")
     implementation("com.google.guava:guava:33.2.1-jre")
