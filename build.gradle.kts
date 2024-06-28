@@ -34,8 +34,8 @@ repositories {
         // Chatbot library
         url = uri("https://maven.pkg.github.com/master-project-nat-ara-tom-23-24/Chatbot")
         credentials {
-            username = project.findProperty("gpr.github_user") as String? ?: System.getenv("GITHUB_USER")
-            password = project.findProperty("gpr.github_token") as String? ?: System.getenv("GITHUB_TOKEN")
+            username = project.findProperty("gpr.github_user") as String?
+            password = project.findProperty("gpr.github_token") as String?
         }
     }
 }
